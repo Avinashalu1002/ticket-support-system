@@ -7,7 +7,7 @@ async function loadAdminDashboard() {
 
         const response =
             await fetch(
-                "http://localhost:5130/api/Dashboard/admin",
+                "https://ticket-support-api-uyjm.onrender.com/api/Dashboard/admin",
                 {
                     headers: {
                         "Authorization":
@@ -61,7 +61,7 @@ async function loadUsers() {
 
         const response =
             await fetch(
-                "http://localhost:5130/api/Admin/users",
+                "https://ticket-support-api-uyjm.onrender.com/api/Admin/users",
                 {
                     headers: {
                         "Authorization":
@@ -161,7 +161,7 @@ async function toggleUserStatus(userId) {
 
         const response =
             await fetch(
-                `http://localhost:5130/api/Users/${userId}/toggle-status`,
+                `https://ticket-support-api-uyjm.onrender.com/api/Users/${userId}/toggle-status`,
                 {
                     method: "PATCH",
                     headers: {
@@ -227,7 +227,7 @@ async function viewUser(userId) {
 
         const response =
             await fetch(
-                `http://localhost:5130/api/Users/${userId}`,
+                `https://ticket-support-api-uyjm.onrender.com/api/Users/${userId}`,
                 {
                     headers: {
                         "Authorization":
@@ -284,7 +284,7 @@ async function loadReports() {
 
         const priorityResponse =
             await fetch(
-                "http://localhost:5130/api/Reports/priority",
+                "https://ticket-support-api-uyjm.onrender.com/api/Reports/priority",
                 {
                     headers:{
                         "Authorization":
@@ -301,7 +301,7 @@ async function loadReports() {
 
         const categoryResponse =
             await fetch(
-                "http://localhost:5130/api/Reports/category",
+                "https://ticket-support-api-uyjm.onrender.com/api/Reports/category",
                 {
                     headers:{
                         "Authorization":
@@ -318,7 +318,7 @@ async function loadReports() {
 
         const engineerResponse =
             await fetch(
-                "http://localhost:5130/api/Reports/engineers",
+                "https://ticket-support-api-uyjm.onrender.com/api/Reports/engineers",
                 {
                     headers:{
                         "Authorization":
@@ -335,7 +335,7 @@ async function loadReports() {
 
         const monthlyResponse =
             await fetch(
-                "http://localhost:5130/api/Reports/monthly",
+                "https://ticket-support-api-uyjm.onrender.com/api/Reports/monthly",
                 {
                     headers:{
                         "Authorization":
@@ -496,7 +496,7 @@ async function loadAdminIdentity() {
 
         const response =
             await fetch(
-                `http://localhost:5130/api/Users/${userId}`,
+                `https://ticket-support-api-uyjm.onrender.com/api/Users/${userId}`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`

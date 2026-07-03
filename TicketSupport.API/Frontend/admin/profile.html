@@ -666,7 +666,7 @@
 
             const response =
                 await fetch(
-                    `http://localhost:5130/api/Users/${userId}`,
+                    `https://ticket-support-api-uyjm.onrender.com/api/Users/${userId}`,
                     {
                         headers: {
                             "Authorization": `Bearer ${token}`
@@ -721,7 +721,7 @@
 
             const summaryResponse =
                 await fetch(
-                    "http://localhost:5130/api/Dashboard/admin",
+                    "https://ticket-support-api-uyjm.onrender.com/api/Dashboard/admin",
                     {
                         headers: {
                             "Authorization": `Bearer ${token}`

@@ -10,7 +10,7 @@ async function login() {
 
         const response =
             await fetch(
-                "http://localhost:5130/api/Auth/login",
+                "https://ticket-support-api-uyjm.onrender.com/api/Auth/login",
                 {
                     method: "POST",
 

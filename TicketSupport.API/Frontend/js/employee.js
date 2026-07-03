@@ -13,7 +13,7 @@ async function getSuggestions() {
     try {
 
         const response = await fetch(
-            "http://localhost:5130/api/AI/suggestions",
+            "https://ticket-support-api-uyjm.onrender.com/api/AI/suggestions",
             {
                 method: "POST",
                 headers: {
@@ -62,7 +62,7 @@ async function analyzeTicket() {
 
         const response =
             await fetch(
-                "http://localhost:5130/api/AI/analyze",
+                "https://ticket-support-api-uyjm.onrender.com/api/AI/analyze",
                 {
                     method: "POST",
 
@@ -134,7 +134,7 @@ async function createTicket() {
 
         const response =
             await fetch(
-                "http://localhost:5130/api/Tickets",
+                "https://ticket-support-api-uyjm.onrender.com/api/Tickets",
                 {
                     method: "POST",
 
@@ -259,7 +259,7 @@ async function loadTickets() {
     try {
 
         const response = await fetch(
-            `http://localhost:5130/api/Tickets/user/${userId}`,
+            `https://ticket-support-api-uyjm.onrender.com/api/Tickets/user/${userId}`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -441,7 +441,7 @@ async function loadTicketDetails() {
 
         const response =
             await fetch(
-                `http://localhost:5130/api/Tickets/${id}`,
+                `https://ticket-support-api-uyjm.onrender.com/api/Tickets/${id}`,
                 {
                     headers: {
                         "Authorization":
@@ -527,7 +527,7 @@ async function addComment() {
     try {
 
         await fetch(
-            "http://localhost:5130/api/TicketComments",
+            "https://ticket-support-api-uyjm.onrender.com/api/TicketComments",
             {
                 method: "POST",
 
@@ -573,7 +573,7 @@ async function loadComments() {
 
         const response =
             await fetch(
-                `http://localhost:5130/api/TicketComments/${ticketId}`,
+                `https://ticket-support-api-uyjm.onrender.com/api/TicketComments/${ticketId}`,
                 {
                     headers: {
                         "Authorization":
@@ -660,7 +660,7 @@ async function uploadAttachment() {
 
         const response =
             await fetch(
-                `http://localhost:5130/api/TicketAttachments/upload/${ticketId}`,
+                `https://ticket-support-api-uyjm.onrender.com/api/TicketAttachments/upload/${ticketId}`,
                 {
                     method: "POST",
 
@@ -703,7 +703,7 @@ async function loadAttachments() {
 
         const response =
             await fetch(
-                `http://localhost:5130/api/TicketAttachments/${ticketId}`,
+                `https://ticket-support-api-uyjm.onrender.com/api/TicketAttachments/${ticketId}`,
                 {
                     headers: {
                         "Authorization":
@@ -732,7 +732,7 @@ async function loadAttachments() {
                     </div>
 
                     <a
-                        href="http://localhost:5130/${file.filePath}"
+                        href="https://ticket-support-api-uyjm.onrender.com/${file.filePath}"
                         target="_blank"
                         class="btn btn-outline-primary btn-sm">
 
@@ -778,7 +778,7 @@ async function loadEmployeeDashboard() {
 
         const response =
             await fetch(
-                `http://localhost:5130/api/Dashboard/employee/${userId}`,
+                `https://ticket-support-api-uyjm.onrender.com/api/Dashboard/employee/${userId}`,
                 {
                     headers: {
                         "Authorization":
@@ -859,7 +859,7 @@ async function loadTicketHistory() {
 
         const response =
             await fetch(
-                `http://localhost:5130/api/TicketHistory/${ticketId}`,
+                `https://ticket-support-api-uyjm.onrender.com/api/TicketHistory/${ticketId}`,
                 {
                     headers: {
                         "Authorization":
@@ -1074,7 +1074,7 @@ chat.scrollTop = chat.scrollHeight;
 
         const response =
             await fetch(
-                "http://localhost:5130/api/AI/suggestions",
+                "https://ticket-support-api-uyjm.onrender.com/api/AI/suggestions",
                 {
                     method:"POST",
 
@@ -1132,7 +1132,7 @@ async function createTicketFromChat(query) {
 
         const analyzeResponse =
             await fetch(
-                "http://localhost:5130/api/AI/analyze",
+                "https://ticket-support-api-uyjm.onrender.com/api/AI/analyze",
                 {
                     method: "POST",
                     headers: {
@@ -1156,7 +1156,7 @@ async function createTicketFromChat(query) {
 
         const ticketResponse =
             await fetch(
-                "http://localhost:5130/api/Tickets",
+                "https://ticket-support-api-uyjm.onrender.com/api/Tickets",
                 {
                     method: "POST",
                     headers: {
@@ -1224,7 +1224,7 @@ async function loadNotifications() {
 
         const response =
             await fetch(
-               `http://localhost:5130/api/Notifications/user/${userId}`,
+               `https://ticket-support-api-uyjm.onrender.com/api/Notifications/user/${userId}`,
                 {
                     headers: {
                         "Authorization":

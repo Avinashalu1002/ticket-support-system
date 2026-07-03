@@ -1,4 +1,4 @@
-@TicketSupport.API_HostAddress = http://localhost:5130
+@TicketSupport.API_HostAddress = https://ticket-support-api-uyjm.onrender.com
 
 GET {{TicketSupport.API_HostAddress}}/weatherforecast/
 Accept: application/json
