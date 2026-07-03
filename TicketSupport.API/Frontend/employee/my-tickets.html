@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Tickets</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <style>
+
+        :root {
+            --navy: #10152a;
+            --navy-light: #1a2140;
+            --teal: #14b8c9;
+            --teal-dark: #0d97a6;
+            --purple: #6D28D9;
+            --bg: #eef1f8;
+            --card-radius: 18px;
+            --shadow: 0 6px 24px rgba(16, 21, 42, 0.06);
+            --text-dark: #1b2036;
+            --text-muted: #8b93a7;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        /* ===== LAYOUT ===== */
+
+        .app-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ===== SIDEBAR ===== */
+
+        .sidebar {
+            width: 260px;
+            background: var(--navy);
+            padding: 28px 18px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 8px 24px 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .brand h1 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+        }
+
+        .brand p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .menu-label {
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            color: #5b6688;
+            font-weight: 600;
+            padding: 18px 12px 8px 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            color: #b6bcd0;
+            text-decoration: none;
+            font-size: 14.5px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            transition: all .15s ease;
+        }
+
+        .nav-item i { font-size: 17px; width: 20px; text-align: center; }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.06);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+            color: #fff;
+            box-shadow: 0 6px 16px rgba(20, 184, 201, 0.35);
+        }
+
+        /* ===== MAIN AREA ===== */
+
+        .main-area {
+            flex: 1;
+            padding: 28px 34px;
+            max-width: 100%;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 26px;
+        }
+
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            color: var(--text-dark);
+            border: none;
+        }
+
+        .icon-btn .badge-count {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ef4444;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            padding: 6px 16px 6px 6px;
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), #5B21B6);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .user-chip .u-name { font-size: 13.5px; font-weight: 700; line-height: 1.1; }
+        .user-chip .u-role { font-size: 11px; color: var(--text-muted); }
+
+        /* ===== PAGE HEADER ===== */
+
+        .dashboard-header {
+            margin-bottom: 24px;
+        }
+
+        .dashboard-title {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 0 0 4px 0;
+            color: var(--text-dark);
+        }
+
+        .dashboard-subtitle {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 14.5px;
+        }
+
+        /* ===== STAT CARDS ===== */
+
+        .stat-card {
+            background: #fff;
+            border-radius: var(--card-radius);
+            padding: 22px 22px 18px 22px;
+            box-shadow: var(--shadow);
+            height: 100%;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .stat-top p {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin: 0 0 6px 0;
+            font-weight: 600;
+        }
+
+        .stat-top h2 {
+            font-size: 30px;
+            font-weight: 800;
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        .stat-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            flex-shrink: 0;
+        }
+
+        .primary-card .stat-icon { background: #dbeefc; color: #0e8fc4; }
+        .warning-card .stat-icon { background: #ffe9d6; color: #f2892b; }
+        .info-card .stat-icon    { background: #e8e2fb; color: #6D28D9; }
+        .success-card .stat-icon { background: #d9f5e4; color: #24b866; }
+
+        .stat-footer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid #f0f1f6;
+            font-size: 12.5px;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #0e8fc4;
+            display: inline-block;
+        }
+
+        .warning-dot { background: #f2892b; }
+        .info-dot    { background: #6D28D9; }
+        .success-dot { background: #24b866; }
+
+        /* ===== SEARCH CARD ===== */
+
+        .search-card {
+            border: none;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            padding-left: 40px;
+            border-radius: 12px;
+            background: #f5f6fb;
+            border: 1px solid #eceef5;
+            height: 46px;
+        }
+
+        .form-select {
+            border-radius: 12px;
+            background-color: #f5f6fb;
+            border: 1px solid #eceef5;
+            height: 46px;
+        }
+
+        .form-select:focus, .search-box input:focus {
+            box-shadow: 0 0 0 3px rgba(20, 184, 201, 0.15);
+            border-color: var(--teal);
+        }
+
+        /* ===== TICKET TABLE CARD ===== */
+
+        .recent-ticket-card {
+            border: none;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            padding: 22px 22px 8px 22px;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .ticket-title { margin: 0; font-size: 18px; }
+        .ticket-subtitle { margin: 2px 0 0 0; color: var(--text-muted); font-size: 13px; }
+
+        .refresh-btn {
+            border-color: var(--teal);
+            color: var(--teal-dark);
+            font-weight: 600;
+            font-size: 13.5px;
+        }
+
+        .refresh-btn:hover {
+            background: var(--teal);
+            border-color: var(--teal);
+            color: #fff;
+        }
+
+        .modern-table {
+            margin-bottom: 0;
+        }
+
+        .modern-table thead th {
+            border: none;
+            color: var(--text-muted);
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            font-weight: 700;
+            padding-bottom: 12px;
+        }
+
+        .modern-table tbody td {
+            border-top: 1px solid #f2f3f8;
+            padding: 14px 10px;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .modern-table tbody tr:hover {
+            background: #fafbff;
+        }
+
+        .badge-pill {
+            padding: 5px 13px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge-open        { background: #ffe9d6; color: #f2892b; }
+        .badge-progress     { background: #e8e2fb; color: #6D28D9; }
+        .badge-resolved     { background: #d9f5e4; color: #24b866; }
+
+        .badge-high   { background: #fde1e1; color: #e34848; }
+        .badge-medium { background: #fff3cf; color: #c99a10; }
+        .badge-low    { background: #e1f2fe; color: #1f9ad6; }
+
+        .view-link {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: #eef1f8;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--teal-dark);
+            text-decoration: none;
+        }
+
+        .view-link:hover { background: var(--teal); color: #fff; }
+
+        /* ===== PAGINATION ===== */
+
+        .pagination-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 4px 4px 4px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .pagination-wrapper small { color: var(--text-muted); }
+
+        .pagination .page-link {
+            border: none;
+            background: #f5f6fb;
+            color: var(--text-dark);
+            margin: 0 3px;
+            border-radius: 10px;
+            font-size: 13.5px;
+        }
+
+        .pagination .page-item.active .page-link {
+            background: var(--teal);
+            color: #fff;
+        }
+
+        @media (max-width: 991px) {
+            .sidebar { display: none; }
+            .main-area { padding: 20px; }
+        }
+
+    </style>
+
+    <link href="../css/design-system.css" rel="stylesheet">
+</head>
+
+<body class="employee-theme">
+
+    <div class="app-shell">
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon"><i class="bi bi-headset"></i></div>
+                <div>
+                    <h1>AI Help Desk</h1>
+                    <p>Employee Portal</p>
+                </div>
+            </div>
+
+            <div class="menu-label">MAIN MENU</div>
+
+            <a href="dashboard.html" class="nav-item">
+                <i class="bi bi-grid-fill"></i> Dashboard
+            </a>
+
+            <a href="create-ticket.html" class="nav-item">
+                <i class="bi bi-plus-circle"></i> Create Ticket
+            </a>
+
+            <a href="my-tickets.html" class="nav-item active">
+                <i class="bi bi-ticket-perforated"></i> My Tickets
+            </a>
+
+            <a href="profile.html" class="nav-item">
+                <i class="bi bi-person-circle"></i> Profile
+            </a>
+
+            <a href="logout.html" class="nav-item">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+
+        </aside>
+
+        <!-- ================= MAIN ================= -->
+
+        <main class="main-area">
+
+            <div class="topbar">
+                <button class="icon-btn"><i class="bi bi-moon-stars"></i></button>
+                <button class="icon-btn">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge-count">19</span>
+                </button>
+                <div class="user-chip">
+                    <div class="user-avatar">A</div>
+                    <div>
+                        <div class="u-name">Avinash</div>
+                        <div class="u-role">Employee</div>
+                    </div>
+                    <i class="bi bi-chevron-down" style="color:#8b93a7;font-size:12px;"></i>
+                </div>
+            </div>
+
+            <div class="my-ticket-page">
+
+                <!-- Page Header -->
+
+                <div class="dashboard-header">
+
+                    <div>
+
+                       <h1 class="dashboard-title">
+
+                            My Support Tickets
+
+                        </h1>
+
+                        <p class="dashboard-subtitle">
+
+                            View, search and monitor all your submitted IT support requests.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- Statistics -->
+
+                <div class="row g-4 mb-4">
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="stat-card primary-card">
+
+                            <div class="stat-top">
+
+                                <div>
+
+                                    <p>Total Tickets</p>
+
+                                    <h2 id="totalCount">0</h2>
+
+                                </div>
+
+                                <div class="stat-icon">
+
+                                    <i class="bi bi-ticket-perforated-fill"></i>
+
+                                </div>
+
+                            </div>
+
+                            <div class="stat-footer">
+
+                                <span class="status-dot"></span>
+
+                                <span>All Tickets</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="stat-card warning-card">
+
+                            <div class="stat-top">
+
+                                <div>
+
+                                    <p>Open</p>
+
+                                    <h2 id="openCount">0</h2>
+
+                                </div>
+
+                                <div class="stat-icon">
+
+                                    <i class="bi bi-folder2-open"></i>
+
+                                </div>
+
+                            </div>
+
+                            <div class="stat-footer">
+
+                                <span class="status-dot warning-dot"></span>
+
+                                <span>Waiting</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="stat-card info-card">
+
+                            <div class="stat-top">
+
+                                <div>
+
+                                    <p>In Progress</p>
+
+                                    <h2 id="progressCount">0</h2>
+
+                                </div>
+
+                                <div class="stat-icon">
+
+                                    <i class="bi bi-hourglass-split"></i>
+
+                                </div>
+
+                            </div>
+
+                            <div class="stat-footer">
+
+                                <span class="status-dot info-dot"></span>
+
+                                <span>Engineer Working</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="stat-card success-card">
+
+                            <div class="stat-top">
+
+                                <div>
+
+                                    <p>Resolved</p>
+
+                                    <h2 id="resolvedCount">0</h2>
+
+                                </div>
+
+                                <div class="stat-icon">
+
+                                    <i class="bi bi-check-circle-fill"></i>
+
+                                </div>
+
+                            </div>
+
+                            <div class="stat-footer">
+
+                                <span class="status-dot success-dot"></span>
+
+                                <span>Completed</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Search & Filters -->
+
+                <div class="card search-card mb-4">
+
+                    <div class="card-body">
+
+                        <div class="row g-3 align-items-center">
+
+                            <div class="col-lg-5">
+
+                                <div class="search-box">
+
+                                    <i class="bi bi-search"></i>
+
+                                    <input
+                                        type="text"
+                                        id="searchBox"
+                                        class="form-control"
+                                        placeholder="Search by Ticket ID, Title or Category..."
+                                        onkeyup="filterTickets()">
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-3">
+
+                                <select
+                                    id="statusFilter"
+                                    class="form-select"
+                                    onchange="filterTickets()">
+
+                                    <option value="">All Status</option>
+
+                                    <option>Open</option>
+
+                                    <option>In Progress</option>
+
+                                    <option>Resolved</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-lg-3">
+
+                                <select
+                                    id="priorityFilter"
+                                    class="form-select"
+                                    onchange="filterTickets()">
+
+                                    <option value="">All Priority</option>
+
+                                    <option>High</option>
+
+                                    <option>Medium</option>
+
+                                    <option>Low</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+               <!-- ================= TICKETS ================= -->
+
+            <div class="card recent-ticket-card">
+
+                <div class="ticket-header">
+
+                    <div>
+
+                        <h4 class="ticket-title fw-bold">
+
+                            My Support Tickets
+
+                        </h4>
+
+                        <p class="ticket-subtitle">
+
+                            Showing the latest 10 tickets. Use search or filters to find older requests.
+
+                        </p>
+
+                    </div>
+
+                    <button
+                        class="btn btn-outline-primary rounded-pill px-4 refresh-btn"
+                        onclick="loadTickets()">
+
+                        <i class="bi bi-arrow-clockwise"></i>
+
+                        Refresh
+
+                    </button>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table modern-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th style="width:120px;">Ticket ID</th>
+
+                                <th>Issue</th>
+
+                                <th>Category</th>
+
+                                <th>Priority</th>
+
+                                <th>Status</th>
+
+                                <th>View</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="ticketTableBody">
+
+                            <!-- Sample row for preview - remove once loadTickets() populates real data -->
+
+                            <tr>
+                                <td>#TCK-1042</td>
+                                <td>Laptop not booting after update</td>
+                                <td>Hardware</td>
+                                <td><span class="badge-pill badge-high">High</span></td>
+                                <td><span class="badge-pill badge-open">Open</span></td>
+                                <td><a href="#" class="view-link"><i class="bi bi-eye"></i></a></td>
+                            </tr>
+
+                            <tr>
+                                <td>#TCK-1039</td>
+                                <td>VPN connection drops frequently</td>
+                                <td>Network</td>
+                                <td><span class="badge-pill badge-medium">Medium</span></td>
+                                <td><span class="badge-pill badge-progress">In Progress</span></td>
+                                <td><a href="#" class="view-link"><i class="bi bi-eye"></i></a></td>
+                            </tr>
+
+                            <tr>
+                                <td>#TCK-1031</td>
+                                <td>Outlook not syncing new mail</td>
+                                <td>Software</td>
+                                <td><span class="badge-pill badge-low">Low</span></td>
+                                <td><span class="badge-pill badge-resolved">Resolved</span></td>
+                                <td><a href="#" class="view-link"><i class="bi bi-eye"></i></a></td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <!-- Pagination -->
+
+            <div class="pagination-wrapper">
+
+                <small>
+
+                    Showing latest 10 tickets
+
+                </small>
+
+                <nav>
+
+                    <ul class="pagination">
+
+                        <li class="page-item">
+                            <a class="page-link"
+                            href="javascript:void(0)"
+                            onclick="previousPage()">
+                                Previous
+                            </a>
+                        </li>
+
+                        <li class="page-item active">
+                            <span class="page-link" id="pageNumber">
+                                1
+                            </span>
+                        </li>
+
+                        <li class="page-item">
+                            <a class="page-link"
+                            href="javascript:void(0)"
+                            onclick="nextPage()">
+                                Next
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </nav>
+
+            </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+<script src="../js/toast.js"></script>
+<script src="../js/status-badges.js"></script>
+<script src="../js/employee.js"></script>
+
+</body>
+
+</html>

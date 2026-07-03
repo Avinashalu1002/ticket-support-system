@@ -1,0 +1,21 @@
+  Determining projects to restore...
+C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.API\TicketSupport.API.csproj : warning NU1510: PackageReference Microsoft.AspNetCore.SignalR will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.
+  All projects are up-to-date for restore.
+C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.API\TicketSupport.API.csproj : warning NU1510: PackageReference Microsoft.AspNetCore.SignalR will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.
+  TicketSupport.Domain -> C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Domain\bin\Debug\net10.0\TicketSupport.Domain.dll
+  TicketSupport.Application -> C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Application\bin\Debug\net10.0\TicketSupport.Application.dll
+C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Infrastructure\Services\TicketService.cs(157,13): error CS0117: 'TicketResponseDto' does not contain a definition for 'Created' [C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Infrastructure\TicketSupport.Infrastructure.csproj]
+C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Infrastructure\Services\GroqService.cs(75,37): warning CS8602: Dereference of a possibly null reference. [C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Infrastructure\TicketSupport.Infrastructure.csproj]
+C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Infrastructure\Services\GroqService.cs(82,13): warning CS8602: Dereference of a possibly null reference. [C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Infrastructure\TicketSupport.Infrastructure.csproj]
+
+Build FAILED.
+
+C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.API\TicketSupport.API.csproj : warning NU1510: PackageReference Microsoft.AspNetCore.SignalR will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.
+C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.API\TicketSupport.API.csproj : warning NU1510: PackageReference Microsoft.AspNetCore.SignalR will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.
+C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Infrastructure\Services\GroqService.cs(75,37): warning CS8602: Dereference of a possibly null reference. [C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Infrastructure\TicketSupport.Infrastructure.csproj]
+C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Infrastructure\Services\GroqService.cs(82,13): warning CS8602: Dereference of a possibly null reference. [C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Infrastructure\TicketSupport.Infrastructure.csproj]
+C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Infrastructure\Services\TicketService.cs(157,13): error CS0117: 'TicketResponseDto' does not contain a definition for 'Created' [C:\Users\adamu\Downloads\TicketSupportSystem_UI_Upgraded\TicketSupportSystem\TicketSupport.Infrastructure\TicketSupport.Infrastructure.csproj]
+    4 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:03.95

@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Ticket Details</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+
+        :root {
+            --navy: #10152a;
+            --teal: #14b8c9;
+            --teal-dark: #0d97a6;
+            --purple: #6D28D9;
+            --purple-dark: #5B21B6;
+            --bg: #eef1f8;
+            --card-radius: 18px;
+            --shadow: 0 6px 24px rgba(16, 21, 42, 0.06);
+            --text-dark: #1b2036;
+            --text-muted: #8b93a7;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        /* ===== LAYOUT ===== */
+
+        .app-shell { display: flex; min-height: 100vh; }
+
+        /* ===== SIDEBAR ===== */
+
+        .sidebar {
+            width: 260px;
+            background: var(--navy);
+            padding: 28px 18px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 8px 24px 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .brand h1 { font-size: 16px; font-weight: 700; color: #fff; margin: 0; }
+        .brand p { font-size: 12px; color: var(--text-muted); margin: 0; }
+
+        .menu-label {
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            color: #5b6688;
+            font-weight: 600;
+            padding: 18px 12px 8px 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            color: #b6bcd0;
+            text-decoration: none;
+            font-size: 14.5px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            transition: all .15s ease;
+        }
+
+        .nav-item i { font-size: 17px; width: 20px; text-align: center; }
+
+        .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+            color: #fff;
+            box-shadow: 0 6px 16px rgba(20, 184, 201, 0.35);
+        }
+
+        /* ===== MAIN AREA ===== */
+
+        .main-area { flex: 1; padding: 28px 34px; max-width: 100%; }
+
+        .topbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            color: var(--text-dark);
+            border: none;
+        }
+
+        .icon-btn .badge-count {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ef4444;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            padding: 6px 16px 6px 6px;
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .user-chip .u-name { font-size: 13.5px; font-weight: 700; line-height: 1.1; }
+        .user-chip .u-role { font-size: 11px; color: var(--text-muted); }
+
+        /* ===== CARDS (shared) ===== */
+
+        .card {
+            border: none;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            background: #fff;
+            border-bottom: 1px solid #f0f1f6;
+            border-radius: var(--card-radius) var(--card-radius) 0 0 !important;
+        }
+
+        .section-title {
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ===== HEADER BANNER ===== */
+
+        .header-card {
+            background: linear-gradient(135deg, var(--teal) 0%, var(--purple) 100%);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-card::after {
+            content: "";
+            position: absolute;
+            right: -40px;
+            top: -40px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .header-card h2 {
+            font-weight: 800;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .header-card p { opacity: 0.9; font-size: 14px; }
+
+        .header-card .back-btn {
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: #fff;
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: 13.5px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .header-card .back-btn:hover { background: rgba(255,255,255,0.3); color: #fff; }
+
+        /* ===== INFO FIELDS ===== */
+
+        .field-label {
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .field-value { font-size: 15px; font-weight: 600; color: var(--text-dark); }
+
+        .inner-card {
+            border-radius: 14px;
+            background: #f8f9fc;
+            border: 1px solid #f0f1f6;
+            box-shadow: none !important;
+        }
+
+        /* ===== BADGES / PILLS ===== */
+
+        .badge-pill {
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 12.5px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge-category  { background: #e1f2fe; color: #1f9ad6; }
+        .badge-open       { background: #ffe9d6; color: #f2892b; }
+        .badge-progress   { background: #e8e2fb; color: #6D28D9; }
+        .badge-resolved   { background: #d9f5e4; color: #24b866; }
+        .badge-high       { background: #fde1e1; color: #e34848; }
+        .badge-medium     { background: #fff3cf; color: #c99a10; }
+        .badge-low        { background: #e1f2fe; color: #1f9ad6; }
+
+        /* ===== ENGINEER / DESCRIPTION ICONS ===== */
+
+        .info-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            flex-shrink: 0;
+        }
+
+        .icon-purple { background: #e8e2fb; color: #6D28D9; }
+        .icon-teal   { background: #d9f5f4; color: #14b8c9; }
+        .icon-orange { background: #ffe9d6; color: #f2892b; }
+
+        /* ===== TIMELINE ===== */
+
+        .timeline { position: relative; padding-left: 6px; }
+
+        .timeline li {
+            position: relative;
+            padding-left: 34px;
+        }
+
+        .timeline li i {
+            position: absolute;
+            left: 0;
+            top: 2px;
+            font-size: 19px;
+        }
+
+        .timeline li:not(:last-child)::before {
+            content: "";
+            position: absolute;
+            left: 9px;
+            top: 24px;
+            bottom: -22px;
+            width: 2px;
+            background: #eceef5;
+        }
+
+        /* ===== COMMENTS ===== */
+
+        #commentText {
+            border-radius: 14px 0 0 14px;
+            background: #f5f6fb;
+            border: 1px solid #eceef5;
+            resize: none;
+        }
+
+        #commentText:focus {
+            box-shadow: none;
+            border-color: var(--teal);
+        }
+
+        .input-group .btn-primary {
+            background: var(--teal);
+            border-color: var(--teal);
+            border-radius: 0 14px 14px 0;
+        }
+
+        .input-group .btn-primary:hover { background: var(--teal-dark); border-color: var(--teal-dark); }
+
+        .comment-item {
+            background: #f8f9fc;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+        }
+
+        /* ===== ATTACHMENTS ===== */
+
+        #attachmentFile {
+            border-radius: 14px 0 0 14px;
+            background: #f5f6fb;
+            border: 1px solid #eceef5;
+        }
+
+        .input-group .btn-success {
+            background: #24b866;
+            border-color: #24b866;
+            border-radius: 0 14px 14px 0;
+            font-weight: 600;
+        }
+
+        .attachment-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8f9fc;
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        /* ===== BACK LINK (fallback, non-header) ===== */
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--teal-dark);
+            font-weight: 600;
+            text-decoration: none;
+            border: 1.5px solid var(--teal);
+            padding: 10px 22px;
+            border-radius: 50px;
+        }
+
+        .back-link:hover { background: var(--teal); color: #fff; }
+
+        @media (max-width: 991px) {
+            .sidebar { display: none; }
+            .main-area { padding: 20px; }
+        }
+
+    </style>
+
+    <link href="../css/design-system.css" rel="stylesheet">
+</head>
+
+<body class="employee-theme">
+
+    <div class="app-shell">
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon"><i class="bi bi-headset"></i></div>
+                <div>
+                    <h1>AI Help Desk</h1>
+                    <p>Employee Portal</p>
+                </div>
+            </div>
+
+            <div class="menu-label">MAIN MENU</div>
+
+            <a href="dashboard.html" class="nav-item">
+                <i class="bi bi-grid-fill"></i> Dashboard
+            </a>
+
+            <a href="create-ticket.html" class="nav-item">
+                <i class="bi bi-plus-circle"></i> Create Ticket
+            </a>
+
+            <a href="my-tickets.html" class="nav-item active">
+                <i class="bi bi-ticket-perforated"></i> My Tickets
+            </a>
+
+            <a href="profile.html" class="nav-item">
+                <i class="bi bi-person-circle"></i> Profile
+            </a>
+
+            <a href="logout.html" class="nav-item">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+
+        </aside>
+
+        <!-- ================= MAIN ================= -->
+
+        <main class="main-area">
+
+            <div class="topbar">
+                <button class="icon-btn"><i class="bi bi-moon-stars"></i></button>
+                <button class="icon-btn">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge-count">19</span>
+                </button>
+                <div class="user-chip">
+                    <div class="user-avatar">A</div>
+                    <div>
+                        <div class="u-name">Avinash</div>
+                        <div class="u-role">Employee</div>
+                    </div>
+                    <i class="bi bi-chevron-down" style="color:#8b93a7;font-size:12px;"></i>
+                </div>
+            </div>
+
+            <div class="container-fluid px-0">
+
+                <!-- Header -->
+
+                <div class="card header-card p-4 mb-4">
+
+                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+
+                        <div>
+                            <h2>
+                                <i class="bi bi-ticket-detailed"></i>
+                                Ticket Details
+                            </h2>
+                            <p class="mb-0">
+                                View ticket information, comments and attachments
+                            </p>
+                        </div>
+
+                        <a href="my-tickets.html" class="back-btn">
+                            <i class="bi bi-arrow-left"></i>
+                            Back To My Tickets
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- Ticket Info -->
+
+                <div class="card p-4 mb-4">
+
+                    <h4 class="section-title">
+                        <i class="bi bi-info-circle-fill text-primary"></i>
+                        Ticket Information
+                    </h4>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="mb-3">
+                                <span class="field-label">Ticket ID</span>
+                                <h5 class="mb-0 field-value">#<span id="ticketId"></span></h5>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="field-label">Title</span>
+                                <span id="title" class="field-value"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="field-label">Category</span>
+                                <div>
+                                    <span id="category" class="badge-pill badge-category"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="mb-3">
+                                <span class="field-label">Priority</span>
+                                <div id="priority"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="field-label">Status</span>
+                                <div id="status"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="field-label">Created Date</span>
+                                <div id="createdDate" class="field-value"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="field-label">Created Time</span>
+                                <div id="createdTime" class="field-value"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <h4 class="section-title mt-4">
+                        <i class="bi bi-person-badge-fill text-primary"></i>
+                        Assigned Engineer
+                    </h4>
+
+                    <div class="card inner-card mb-4">
+
+                        <div class="card-body">
+
+                            <div class="row g-3">
+
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="info-icon icon-purple me-3">
+                                            <i class="bi bi-person-fill"></i>
+                                        </div>
+                                        <div>
+                                            <span class="field-label mb-0">Engineer</span>
+                                            <h6 id="engineerName" class="mb-0"></h6>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="info-icon icon-teal me-3">
+                                            <i class="bi bi-envelope-fill"></i>
+                                        </div>
+                                        <div>
+                                            <span class="field-label mb-0">Email</span>
+                                            <div id="engineerEmail"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="info-icon icon-orange me-3">
+                                            <i class="bi bi-telephone-fill"></i>
+                                        </div>
+                                        <div>
+                                            <span class="field-label mb-0">Mobile</span>
+                                            <div id="engineerPhone"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <h4 class="section-title mt-4">
+                        <i class="bi bi-card-text text-primary"></i>
+                        Issue Description
+                    </h4>
+
+                    <div class="card inner-card mb-2">
+                        <div class="card-body">
+                            <p id="description" class="mb-0 text-secondary" style="line-height:1.8;"></p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Timeline -->
+
+                <div class="card mb-4">
+
+                    <div class="card-header">
+                        <h4 class="mb-0 section-title" style="margin-bottom:0;">
+                            <i class="bi bi-clock-history text-primary"></i>
+                            Ticket Timeline
+                        </h4>
+                    </div>
+
+                    <div class="card-body">
+
+                        <ul class="timeline list-unstyled">
+
+                            <li class="mb-4">
+                                <i class="bi bi-plus-circle-fill text-primary"></i>
+                                <strong>Ticket Created</strong>
+                                <br>
+                                <small id="timelineCreated" class="text-muted"></small>
+                            </li>
+
+                            <li class="mb-4">
+                                <i class="bi bi-person-check-fill text-info"></i>
+                                <strong>Assigned to Engineer</strong>
+                                <br>
+                                <small id="timelineEngineer" class="text-muted"></small>
+                            </li>
+
+                            <li class="mb-4">
+                                <i class="bi bi-tools text-warning"></i>
+                                <strong>Status</strong>
+                                <br>
+                                <small id="timelineStatus" class="text-muted"></small>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+                <!-- Comments -->
+
+                <div class="card mb-4">
+
+                    <div class="card-header">
+                        <h4 class="mb-0 section-title" style="margin-bottom:0;">
+                            <i class="bi bi-chat-dots-fill text-primary"></i>
+                            Comments
+                        </h4>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="input-group mb-4">
+
+                            <textarea
+                                id="commentText"
+                                class="form-control"
+                                rows="3"
+                                placeholder="Write your comment..."></textarea>
+
+                            <button
+                                class="btn btn-primary px-4"
+                                onclick="addComment()">
+                                <i class="bi bi-send-fill"></i>
+                            </button>
+
+                        </div>
+
+                        <div id="commentsList"></div>
+
+                    </div>
+
+                </div>
+
+                <!-- Attachments -->
+
+                <div class="card mb-4">
+
+                    <div class="card-header">
+                        <h4 class="mb-0 section-title" style="margin-bottom:0;">
+                            <i class="bi bi-paperclip text-success"></i>
+                            Attachments
+                        </h4>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="input-group mb-4">
+
+                            <input
+                                type="file"
+                                id="attachmentFile"
+                                class="form-control">
+
+                            <button
+                                class="btn btn-success"
+                                onclick="uploadAttachment()">
+                                <i class="bi bi-upload"></i>
+                                Upload
+                            </button>
+
+                        </div>
+
+                        <div id="attachmentsList"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+<script src="../js/toast.js"></script>
+<script src="../js/status-badges.js"></script>
+<script src="../js/employee.js"></script>
+
+</body>
+</html>

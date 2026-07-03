@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/theme.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        :root{
+            --navy:#0f172a;
+            --navy-2:#16213e;
+            --blue:#2563eb;
+            --blue-light:#3b82f6;
+            --bg:#f4f6f9;
+            --card:#ffffff;
+            --text:#1e293b;
+            --muted:#64748b;
+            --border:rgba(15,23,42,.06);
+            --sidebar-w:250px;
+            --shadow-sm:0 2px 10px rgba(15,23,42,.06);
+            --shadow-md:0 12px 30px rgba(15,23,42,.10);
+        }
+
+        [data-theme="dark"]{
+            --bg:#0b1220;
+            --card:#111a2e;
+            --text:#e7ecf5;
+            --muted:#93a2ba;
+            --border:rgba(255,255,255,.06);
+            --shadow-sm:0 2px 10px rgba(0,0,0,.35);
+            --shadow-md:0 12px 30px rgba(0,0,0,.45);
+        }
+
+        *{ box-sizing:border-box; }
+
+        body{
+            margin:0;
+            background:var(--bg);
+            color:var(--text);
+            font-family:'Inter','Segoe UI',sans-serif;
+            transition:background .3s ease, color .3s ease;
+        }
+
+        h2, h3, h5, h6{
+            font-family:'Sora','Segoe UI',sans-serif;
+        }
+
+        /* ---------- SIDEBAR ---------- */
+
+        .sidebar{
+            width:var(--sidebar-w);
+            height:100vh;
+            background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);
+            position:fixed;
+            top:0;
+            left:0;
+            color:white;
+            display:flex;
+            flex-direction:column;
+            z-index:1000;
+            transition:transform .3s ease, width .3s ease;
+            box-shadow:4px 0 24px rgba(0,0,0,.15);
+        }
+
+        .logo{
+            padding:22px 20px;
+            font-size:20px;
+            font-family:'Sora',sans-serif;
+            font-weight:700;
+            border-bottom:1px solid rgba(255,255,255,.08);
+            display:flex;
+            align-items:center;
+            gap:10px;
+            letter-spacing:.3px;
+        }
+
+        .logo i{
+            color:#60a5fa;
+            font-size:22px;
+        }
+
+        .menu-wrap{
+            padding:14px 12px;
+            display:flex;
+            flex-direction:column;
+            gap:4px;
+        }
+
+        .menu-link{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            color:rgba(255,255,255,.75);
+            text-decoration:none;
+            padding:12px 14px;
+            border-radius:10px;
+            font-size:14.5px;
+            font-weight:500;
+            position:relative;
+            transition:background .2s ease, color .2s ease, transform .2s ease;
+        }
+
+        .menu-link i{
+            font-size:17px;
+            width:20px;
+            text-align:center;
+        }
+
+        .menu-link:hover{
+            background:rgba(255,255,255,.08);
+            color:#fff;
+            transform:translateX(3px);
+        }
+
+        .menu-link.active{
+            background:linear-gradient(90deg,var(--blue),var(--blue-light));
+            color:#fff;
+            box-shadow:0 6px 16px rgba(37,99,235,.35);
+        }
+
+        .menu-link.active::before{
+            content:"";
+            position:absolute;
+            left:-12px;
+            top:50%;
+            transform:translateY(-50%);
+            width:4px;
+            height:60%;
+            background:#60a5fa;
+            border-radius:4px;
+        }
+
+        .sidebar-footer{
+            margin-top:auto;
+            padding:16px 20px;
+            font-size:12px;
+            color:rgba(255,255,255,.35);
+            border-top:1px solid rgba(255,255,255,.08);
+        }
+
+        /* ---------- TOPBAR ---------- */
+
+        .topbar{
+            margin-left:var(--sidebar-w);
+            position:sticky;
+            top:0;
+            z-index:900;
+            background:var(--card);
+            border-bottom:1px solid var(--border);
+            padding:14px 25px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            transition:margin-left .3s ease, background .3s ease;
+        }
+
+        .topbar-left{
+            display:flex;
+            align-items:center;
+            gap:14px;
+        }
+
+        #sidebarToggle{
+            border:none;
+            background:var(--bg);
+            color:var(--text);
+            width:38px;
+            height:38px;
+            border-radius:10px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            cursor:pointer;
+            transition:background .2s ease;
+        }
+        #sidebarToggle:hover{ background:var(--border); }
+
+
+        .topbar-right{
+            display:flex;
+            align-items:center;
+            gap:16px;
+        }
+
+        .icon-btn{
+            border:none;
+            background:var(--bg);
+            color:var(--text);
+            width:38px;
+            height:38px;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            cursor:pointer;
+            position:relative;
+            transition:background .2s ease, transform .2s ease;
+        }
+        .icon-btn:hover{ background:var(--border); transform:translateY(-1px); }
+
+        .avatar{
+            width:38px;
+            height:38px;
+            border-radius:50%;
+            background:linear-gradient(135deg,var(--blue),#7c3aed);
+            color:#fff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:700;
+            font-size:14px;
+        }
+
+        .user-chip{
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+
+        .user-name{
+            font-size:14px;
+            font-weight:600;
+            color:var(--text);
+        }
+
+        @media (max-width: 900px){
+            .user-name{ display:none; }
+        }
+
+        /* ---------- MAIN ---------- */
+
+        .main{
+            margin-left:var(--sidebar-w);
+            padding:25px;
+            transition:margin-left .3s ease;
+        }
+
+        body.collapsed .sidebar{ transform:translateX(-100%); }
+        body.collapsed .topbar,
+        body.collapsed .main{ margin-left:0; }
+
+        .page-head{
+            display:flex;
+            align-items:flex-end;
+            justify-content:space-between;
+            flex-wrap:wrap;
+            gap:10px;
+            margin-bottom:4px;
+        }
+
+        .page-head h2{
+            font-weight:700;
+            margin-bottom:2px;
+        }
+
+        .text-muted{ color:var(--muted) !important; }
+
+        .badge-live{
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+            background:rgba(34,197,94,.12);
+            color:#16a34a;
+            font-size:12.5px;
+            font-weight:600;
+            padding:6px 12px;
+            border-radius:20px;
+        }
+        .badge-live .pulse{
+            width:7px;
+            height:7px;
+            border-radius:50%;
+            background:#22c55e;
+            box-shadow:0 0 0 rgba(34,197,94,.5);
+            animation:pulse 2s infinite;
+        }
+        @keyframes pulse{
+            0%{ box-shadow:0 0 0 0 rgba(34,197,94,.5); }
+            70%{ box-shadow:0 0 0 8px rgba(34,197,94,0); }
+            100%{ box-shadow:0 0 0 0 rgba(34,197,94,0); }
+        }
+
+        /* ---------- CARDS ---------- */
+
+        .card{
+            border:none;
+            border-radius:16px;
+            box-shadow:var(--shadow-sm);
+            background:var(--card);
+            color:var(--text);
+            transition:transform .25s ease, box-shadow .25s ease, background .3s ease;
+            opacity:0;
+            transform:translateY(14px);
+            animation:fadeUp .5s ease forwards;
+        }
+
+        .card:hover{
+            transform:translateY(-4px);
+            box-shadow:var(--shadow-md);
+        }
+
+        @keyframes fadeUp{
+            to{ opacity:1; transform:translateY(0); }
+        }
+
+        .row.mt-4 > div:nth-child(1) .card{ animation-delay:.02s; }
+        .row.mt-4 > div:nth-child(2) .card{ animation-delay:.08s; }
+        .row.mt-4 > div:nth-child(3) .card{ animation-delay:.14s; }
+        .row.mt-4 > div:nth-child(4) .card{ animation-delay:.20s; }
+
+        .stat-card h6{
+            color:var(--muted);
+            font-weight:600;
+            font-size:13px;
+            text-transform:uppercase;
+            letter-spacing:.4px;
+            margin-bottom:6px;
+        }
+
+        .stat-card h2{
+            font-weight:700;
+            font-size:30px;
+            margin-bottom:0;
+        }
+
+        .stat-icon-wrap{
+            width:56px;
+            height:56px;
+            border-radius:14px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:24px;
+        }
+
+        .icon-primary{ background:rgba(37,99,235,.12); color:#2563eb; }
+        .icon-success{ background:rgba(22,163,74,.12); color:#16a34a; }
+        .icon-warning{ background:rgba(217,119,6,.12); color:#d97706; }
+        .icon-danger{ background:rgba(220,38,38,.12); color:#dc2626; }
+
+        .stat-icon{ font-size:inherit; }
+
+        .trend{
+            font-size:12.5px;
+            font-weight:600;
+            margin-top:8px;
+            display:inline-flex;
+            align-items:center;
+            gap:4px;
+        }
+        .trend.up{ color:#16a34a; }
+
+        /* ---------- WELCOME ---------- */
+
+        .welcome-card{
+            background:linear-gradient(135deg,#2563eb,#1e40af 60%, #6d28d9);
+            color:white;
+            position:relative;
+            overflow:hidden;
+            animation-delay:.26s;
+        }
+        .welcome-card::after{
+            content:"";
+            position:absolute;
+            right:-40px;
+            top:-40px;
+            width:220px;
+            height:220px;
+            background:radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
+            border-radius:50%;
+        }
+        .welcome-card h3{ font-weight:700; }
+        .welcome-card .btn-light{
+            border-radius:10px;
+            font-weight:600;
+            padding:8px 18px;
+            border:none;
+        }
+
+        /* ---------- CHART / LIST CARD ---------- */
+
+        .row.mt-4:nth-of-type(3) .card,
+        .card canvas{ animation-delay:.32s; }
+
+        .chart-card-head{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            margin-bottom:6px;
+        }
+
+        .chart-hint{
+            font-size:12px;
+            color:var(--muted);
+            display:flex;
+            align-items:center;
+            gap:6px;
+        }
+
+        .list-group-item{
+            background:transparent;
+            color:var(--text);
+            border-color:var(--border);
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:14px 10px;
+            font-size:14.5px;
+            border-radius:10px;
+            cursor:pointer;
+            transition:background .18s ease, transform .18s ease, padding-left .18s ease;
+        }
+
+        .list-group-item .row-label{
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+
+        .row-dot{
+            width:10px;
+            height:10px;
+            border-radius:50%;
+            flex-shrink:0;
+            transition:transform .18s ease, box-shadow .18s ease;
+        }
+
+        .list-group-item span.row-count{
+            font-weight:700;
+            padding:3px 12px;
+            border-radius:20px;
+            font-size:13px;
+            transition:transform .18s ease;
+        }
+
+        #openTickets{ background:rgba(220,38,38,.12); color:#dc2626; }
+        #inProgressTickets{ background:rgba(217,119,6,.12); color:#d97706; }
+        #resolvedTickets{ background:rgba(22,163,74,.12); color:#16a34a; }
+
+        .list-group-item:hover{
+            background:var(--border);
+            padding-left:14px;
+        }
+
+        .list-group-item.row-active{
+            background:var(--border) !important;
+            padding-left:14px;
+        }
+
+        .list-group-item.row-active .row-dot{
+            transform:scale(1.3);
+            box-shadow:0 0 0 4px rgba(37,99,235,.15);
+        }
+
+        .list-group-item.row-active span.row-count{
+            transform:scale(1.08);
+        }
+
+        #adminChart{ cursor:pointer; }
+
+        /* scrollbar */
+        ::-webkit-scrollbar{ width:8px; height:8px; }
+        ::-webkit-scrollbar-thumb{ background:rgba(100,116,139,.35); border-radius:8px; }
+
+        @media (max-width: 900px){
+            .sidebar{ transform:translateX(-100%); }
+            .topbar, .main{ margin-left:0; }
+            body.collapsed .sidebar{ transform:translateX(0); }
+            .search-box{ display:none; }
+        }
+
+        :focus-visible{
+            outline:2px solid var(--blue-light);
+            outline-offset:2px;
+        }
+
+        @media (prefers-reduced-motion: reduce){
+            *{ animation:none !important; transition:none !important; }
+        }
+
+    </style>
+
+    <link href="../css/design-system.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo">
+
+        <i class="bi bi-shield-check"></i>
+
+        Admin Panel
+
+    </div>
+
+    <div class="menu-wrap">
+
+        <a href="dashboard.html"
+           class="menu-link active">
+
+            <i class="bi bi-grid-1x2"></i>
+            Dashboard
+
+        </a>
+
+        <a href="users.html"
+           class="menu-link">
+
+            <i class="bi bi-people"></i>
+            Manage Users
+
+        </a>
+
+        <a href="reports.html"
+           class="menu-link">
+
+            <i class="bi bi-bar-chart"></i>
+            Reports
+
+        </a>
+
+        <a href="profile.html"
+        class="menu-link">
+
+            <i class="bi bi-person-circle"></i>
+            Profile
+
+        </a>
+
+        <a href="#"
+           class="menu-link"
+           onclick="logout()">
+
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+
+        </a>
+
+    </div>
+
+    <div class="sidebar-footer">
+        &copy; 2026 Admin Panel
+    </div>
+
+</div>
+
+<div class="topbar">
+
+    <div class="topbar-left">
+        <button id="sidebarToggle" title="Toggle sidebar" aria-label="Toggle sidebar">
+            <i class="bi bi-list" style="font-size:20px;"></i>
+        </button>
+
+    </div>
+
+    <div class="topbar-right">
+        <span class="badge-live"><span class="pulse"></span> Live</span>
+
+        <button class="icon-btn" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+            <i class="bi bi-moon-stars"></i>
+        </button>
+
+        <a href="profile.html" class="user-chip text-decoration-none" title="My Profile">
+            <div class="avatar" id="userAvatar">A</div>
+            <span class="user-name" id="userName">Admin</span>
+        </a>
+    </div>
+
+</div>
+
+<div class="main">
+
+    <div class="page-head">
+        <div>
+            <h2>
+                Admin Dashboard
+            </h2>
+
+            <p class="text-muted mb-0">
+                Monitor users, tickets and system activity
+            </p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+
+        <div class="col-md-3">
+            <div class="card p-4 stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6>Total Users</h6>
+                        <h2 id="totalUsers">0</h2>
+                        <span class="trend up"><i class="bi bi-arrow-up-short"></i>Live count</span>
+                    </div>
+                    <div class="stat-icon-wrap icon-primary">
+                        <i class="bi bi-people stat-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-4 stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6>Employees</h6>
+                        <h2 id="totalEmployees">0</h2>
+                        <span class="trend up"><i class="bi bi-arrow-up-short"></i>Live count</span>
+                    </div>
+                    <div class="stat-icon-wrap icon-success">
+                        <i class="bi bi-person stat-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-4 stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6>Engineers</h6>
+                        <h2 id="totalEngineers">0</h2>
+                        <span class="trend up"><i class="bi bi-arrow-up-short"></i>Live count</span>
+                    </div>
+                    <div class="stat-icon-wrap icon-warning">
+                        <i class="bi bi-tools stat-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-4 stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6>Total Tickets</h6>
+                        <h2 id="totalTickets">0</h2>
+                        <span class="trend up"><i class="bi bi-arrow-up-short"></i>Live count</span>
+                    </div>
+                    <div class="stat-icon-wrap icon-danger">
+                        <i class="bi bi-ticket stat-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card welcome-card p-4 mt-4">
+
+        <h3>
+            Welcome, <span id="greetingName">Admin</span> 👋
+        </h3>
+
+        <p class="mb-0">
+            Manage users, tickets, reports and monitor performance.
+        </p>
+
+    </div>
+
+    <div class="row mt-4">
+
+        <div class="col-md-6">
+
+            <div class="card p-4 h-100">
+
+                <div class="chart-card-head">
+                    <h5 class="mb-0">Ticket Status Overview</h5>
+                    <span class="chart-hint"><i class="bi bi-cursor"></i> Click a slice</span>
+                </div>
+
+                <canvas id="adminChart"></canvas>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card p-4 h-100">
+
+                <div class="chart-card-head">
+                    <h5 class="mb-0">System Summary</h5>
+                    <span class="chart-hint"><i class="bi bi-cursor"></i> Click a row</span>
+                </div>
+
+                <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item" data-status="open">
+                        <span class="row-label">
+                            <span class="row-dot" style="background:#dc2626;"></span>
+                            Open Tickets
+                        </span>
+                        <span id="openTickets" class="row-count"></span>
+                    </li>
+
+                    <li class="list-group-item" data-status="inprogress">
+                        <span class="row-label">
+                            <span class="row-dot" style="background:#d97706;"></span>
+                            In Progress
+                        </span>
+                        <span id="inProgressTickets" class="row-count"></span>
+                    </li>
+
+                    <li class="list-group-item" data-status="resolved">
+                        <span class="row-label">
+                            <span class="row-dot" style="background:#16a34a;"></span>
+                            Resolved
+                        </span>
+                        <span id="resolvedTickets" class="row-count"></span>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // ---- UI-only enhancements below. Nothing here touches dashboard data/logic. ----
+
+    // Sidebar collapse toggle
+    document.getElementById('sidebarToggle').addEventListener('click', function () {
+        document.body.classList.toggle('collapsed');
+    });
+
+    // Dark mode toggle
+    const themeBtn = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('admin-theme');
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeBtn.innerHTML = '<i class="bi bi-sun"></i>';
+    }
+    themeBtn.addEventListener('click', function () {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('admin-theme', 'light');
+            themeBtn.innerHTML = '<i class="bi bi-moon-stars"></i>';
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('admin-theme', 'dark');
+            themeBtn.innerHTML = '<i class="bi bi-sun"></i>';
+        }
+    });
+</script>
+
+<script src="../js/toast.js"></script>
+<script src="../js/status-badges.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+    // ---- Chart <-> Summary interactivity (does not touch admin.js) ----
+
+    function attachChartInteractivity() {
+
+        const chart = Chart.getChart('adminChart');
+
+        if (!chart || !chart.data.labels || chart.data.labels.length === 0) {
+            // admin.js hasn't finished rendering the chart yet — retry shortly
+            setTimeout(attachChartInteractivity, 300);
+            return;
+        }
+
+        const rows = Array.from(document.querySelectorAll('.list-group-item[data-status]'));
+
+        // Match each row to its chart slice by label text, not fixed order —
+        // works no matter how admin.js builds/orders the chart.
+        function findChartIndexForRow(row) {
+            const rowText = row.querySelector('.row-label').textContent.trim().toLowerCase();
+
+            return chart.data.labels.findIndex(label => {
+                const chartLabel = String(label).toLowerCase();
+                return rowText.includes(chartLabel) || chartLabel.includes(rowText);
+            });
+        }
+
+        const rowToIndex = rows.map(row => findChartIndexForRow(row));
+
+        function highlightRow(chartIndex) {
+            rows.forEach((row, i) => {
+                row.classList.toggle('row-active', rowToIndex[i] === chartIndex);
+            });
+        }
+
+        function clearHighlight() {
+            rows.forEach(row => row.classList.remove('row-active'));
+        }
+
+        // Nicer tooltip: show ticket count + percentage of total
+        chart.options.plugins = chart.options.plugins || {};
+        chart.options.plugins.tooltip = chart.options.plugins.tooltip || {};
+        chart.options.plugins.tooltip.callbacks = {
+            label: (item) => {
+                const total = item.dataset.data.reduce((sum, v) => sum + v, 0);
+                const pct = total ? Math.round((item.raw / total) * 100) : 0;
+                return `${item.label}: ${item.raw} tickets (${pct}%)`;
+            }
+        };
+
+        // Hover on a chart slice -> highlight the matching row, live
+        chart.options.onHover = (evt, elements) => {
+            evt.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+
+            if (elements.length) {
+                highlightRow(elements[0].index);
+            } else {
+                clearHighlight();
+            }
+        };
+
+        // Click a chart slice -> pulse that slice + keep the row highlighted
+        chart.options.onClick = (evt, elements) => {
+            if (elements.length) {
+                highlightRow(elements[0].index);
+            }
+        };
+
+        chart.update();
+
+        // Hover/click a row -> highlight the matching chart slice, live
+        rows.forEach((row, i) => {
+            const chartIndex = rowToIndex[i];
+
+            if (chartIndex === -1) return; // no matching slice found for this row, skip safely
+
+            row.addEventListener('mouseenter', () => {
+                chart.setActiveElements([{ datasetIndex: 0, index: chartIndex }]);
+                chart.tooltip.setActiveElements(
+                    [{ datasetIndex: 0, index: chartIndex }],
+                    { x: 0, y: 0 }
+                );
+                chart.update();
+                highlightRow(chartIndex);
+            });
+
+            row.addEventListener('mouseleave', () => {
+                chart.setActiveElements([]);
+                chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+                chart.update();
+                clearHighlight();
+            });
+
+            row.addEventListener('click', () => {
+                highlightRow(chartIndex);
+            });
+        });
+
+        // Clicking empty space in the card clears the selection
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.list-group-item') && !e.target.closest('#adminChart')) {
+                clearHighlight();
+            }
+        });
+    }
+
+    attachChartInteractivity();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Ticket</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+
+        /* ======================================================
+           Self-contained styles — no external theme.css needed.
+           ====================================================== */
+
+        :root{
+            --ink:#241344;
+            --ink-2:#341B66;
+            --teal:#6D28D9;
+            --cyan:#8B5CF6;
+            --violet:#2563EB;
+            --bg:#F8FAFC;
+            --card:#ffffff;
+            --text:#1e293b;
+            --muted:#64748B;
+            --border:rgba(15,23,42,.07);
+            --sidebar-w:270px;
+            --shadow-sm:0 2px 10px rgba(15,23,42,.06);
+            --shadow-md:0 16px 36px rgba(15,23,42,.12);
+        }
+
+        [data-theme="dark"]{
+            --bg:#0b1120;
+            --card:#121a2c;
+            --text:#e7ecf5;
+            --muted:#93a2ba;
+            --border:rgba(255,255,255,.07);
+            --shadow-sm:0 2px 10px rgba(0,0,0,.35);
+            --shadow-md:0 16px 36px rgba(0,0,0,.5);
+        }
+
+        *{ box-sizing:border-box; }
+
+        body{
+            margin:0;
+            background:var(--bg);
+            color:var(--text);
+            font-family:'Inter','Segoe UI',sans-serif;
+            transition:background .3s ease, color .3s ease;
+        }
+
+        h2, h4, h5{ font-family:'Sora','Segoe UI',sans-serif; }
+
+        a{ text-decoration:none; }
+
+        /* ---------- SIDEBAR ---------- */
+
+        .sidebar{
+            width:var(--sidebar-w);
+            height:100vh;
+            position:fixed;
+            top:0;
+            left:0;
+            background:linear-gradient(180deg,var(--ink) 0%, var(--ink-2) 100%);
+            color:#fff;
+            padding:24px 16px;
+            z-index:1000;
+            overflow-y:auto;
+            transition:transform .3s ease;
+        }
+
+        .sidebar-logo{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:6px 10px 22px;
+            border-bottom:1px solid rgba(255,255,255,.08);
+            margin-bottom:18px;
+        }
+
+        .logo-icon{
+            width:42px;
+            height:42px;
+            border-radius:12px;
+            background:linear-gradient(135deg,var(--teal),var(--cyan));
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:19px;
+            flex-shrink:0;
+            box-shadow:0 6px 16px rgba(8,145,178,.35);
+        }
+
+        .sidebar-logo h4{
+            margin:0;
+            font-size:16px;
+            font-weight:700;
+        }
+
+        .sidebar-logo small{
+            color:rgba(255,255,255,.5);
+            font-size:12px;
+        }
+
+        .menu-title{
+            font-size:11px;
+            font-weight:700;
+            letter-spacing:.6px;
+            color:rgba(255,255,255,.35);
+            padding:6px 14px;
+            margin-bottom:4px;
+        }
+
+        .menu-link{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            color:rgba(255,255,255,.75);
+            padding:12px 14px;
+            border-radius:12px;
+            margin-bottom:4px;
+            font-size:14.5px;
+            font-weight:500;
+            transition:background .2s ease, color .2s ease, transform .2s ease;
+        }
+
+        .menu-link i{ font-size:16.5px; width:20px; text-align:center; }
+
+        .menu-link:hover{
+            background:rgba(255,255,255,.07);
+            color:#fff;
+            transform:translateX(3px);
+        }
+
+        .menu-link.active{
+            background:linear-gradient(135deg,var(--teal),var(--cyan));
+            color:#fff;
+            box-shadow:0 8px 20px rgba(6,182,212,.3);
+        }
+
+        /* ---------- TOPBAR ---------- */
+
+        .topbar{
+            margin-left:var(--sidebar-w);
+            position:sticky;
+            top:0;
+            z-index:900;
+            background:var(--card);
+            border-bottom:1px solid var(--border);
+            padding:14px 30px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            transition:margin-left .3s ease, background .3s ease;
+        }
+
+        #sidebarToggle{
+            border:none;
+            background:var(--bg);
+            color:var(--text);
+            width:38px;
+            height:38px;
+            border-radius:10px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            cursor:pointer;
+        }
+        #sidebarToggle:hover{ background:var(--border); }
+
+        .icon-btn{
+            border:none;
+            background:var(--bg);
+            color:var(--text);
+            width:38px;
+            height:38px;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            cursor:pointer;
+            transition:background .2s ease, transform .2s ease;
+        }
+        .icon-btn:hover{ background:var(--border); transform:translateY(-1px); }
+
+        /* ---------- MAIN ---------- */
+
+        .main-wrap{
+            margin-left:var(--sidebar-w);
+            transition:margin-left .3s ease;
+        }
+
+        body.collapsed .sidebar{ transform:translateX(-100%); }
+        body.collapsed .topbar,
+        body.collapsed .main-wrap{ margin-left:0; }
+
+        .container{
+            max-width:980px;
+        }
+
+        /* ---------- PAGE HEADER ---------- */
+
+        .page-header{
+
+            background:linear-gradient(135deg,var(--violet),var(--indigo,#6366F1) 55%, var(--cyan));
+            color:white;
+
+            border-radius:22px;
+
+            padding:22px 30px;
+
+            margin-bottom:30px;
+
+            box-shadow:0 15px 35px rgba(124,58,237,.25);
+
+            position:relative;
+            overflow:hidden;
+            opacity:0;
+            transform:translateY(14px);
+            animation:fadeUp .5s ease forwards;
+
+        }
+
+        .page-header::after{
+            content:"";
+            position:absolute;
+            right:-40px;
+            top:-40px;
+            width:220px;
+            height:220px;
+            background:radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
+            border-radius:50%;
+        }
+
+        @keyframes fadeUp{ to{ opacity:1; transform:translateY(0); } }
+
+        .page-header h2{
+
+            font-size:32px;
+
+            font-weight:700;
+
+            margin-bottom:8px;
+
+            position:relative;
+            z-index:1;
+
+        }
+
+        .page-header p{
+
+            margin:0;
+
+            opacity:.9;
+
+            font-size:16.5px;
+
+            position:relative;
+            z-index:1;
+
+        }
+
+        /* ---------- FORM CARD ---------- */
+
+        .card{
+
+            border:none;
+
+            border-radius:28px;
+
+            padding:15px;
+
+            box-shadow:0 18px 45px rgba(15,23,42,.08);
+            background:var(--card);
+            color:var(--text);
+            opacity:0;
+            transform:translateY(14px);
+            animation:fadeUp .5s ease forwards;
+            animation-delay:.1s;
+
+        }
+
+        .form-control,
+        .form-select{
+
+            height:56px;
+
+            border-radius:16px;
+
+            border:1px solid var(--border);
+            background:var(--bg);
+            color:var(--text);
+
+            font-size:16px;
+
+            box-shadow:none;
+
+            transition:.3s;
+
+        }
+
+        .form-control:focus,
+        .form-select:focus{
+
+            border-color:var(--teal);
+
+            box-shadow:0 0 0 4px rgba(8,145,178,.14);
+            background:var(--card);
+
+        }
+
+        .form-label{
+
+            font-weight:600;
+
+            color:var(--text);
+
+            margin-bottom:10px;
+
+        }
+
+        textarea.form-control{
+            height:auto;
+        }
+
+        .upload-box{
+
+            border:2px dashed var(--border);
+
+            border-radius:20px;
+
+            background:var(--bg);
+
+            padding:28px;
+
+            text-align:center;
+
+            transition:.3s;
+
+        }
+
+        .upload-box:hover{
+
+            border-color:var(--teal);
+
+            background:rgba(8,145,178,.05);
+
+        }
+
+        .upload-icon{
+
+            font-size:55px;
+
+            color:var(--teal);
+
+        }
+
+        .submit-btn{
+
+            border-radius:16px;
+
+            font-weight:600;
+
+            min-width:200px;
+
+            height:56px;
+
+            background:linear-gradient(135deg,var(--violet),var(--cyan));
+
+            border:none;
+
+            transition:.3s;
+
+        }
+
+        .submit-btn:hover{
+
+            transform:translateY(-3px);
+
+            box-shadow:0 15px 30px rgba(6,182,212,.30);
+
+        }
+
+        .cancel-btn{
+
+            border-radius:16px;
+
+            min-width:160px;
+
+            height:56px;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            border:1px solid var(--border);
+
+            background:var(--card);
+
+            color:var(--muted);
+
+            font-weight:600;
+
+        }
+
+        .cancel-btn:hover{
+
+            background:var(--bg);
+
+        }
+
+        .section-title{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:12px;
+
+            margin-bottom:25px;
+
+            font-size:22px;
+
+            font-weight:700;
+
+            color:var(--text);
+
+        }
+
+        .section-title i{
+
+            color:var(--teal);
+
+            font-size:24px;
+
+        }
+
+        .section-divider{
+
+            margin:35px 0;
+
+            border:0;
+
+            border-top:1px solid var(--border);
+
+        }
+
+        .is-invalid{
+
+            border:2px solid #EF4444 !important;
+
+            box-shadow:0 0 0 4px rgba(239,68,68,.12);
+
+        }
+
+        #selectedFile{
+            font-size:13px;
+        }
+
+        ::-webkit-scrollbar{ width:8px; height:8px; }
+        ::-webkit-scrollbar-thumb{ background:rgba(100,116,139,.35); border-radius:8px; }
+
+        @media (max-width: 992px){
+            .sidebar{ transform:translateX(-100%); }
+            .topbar, .main-wrap{ margin-left:0; }
+            body.collapsed .sidebar{ transform:translateX(0); }
+        }
+
+        :focus-visible{
+            outline:2px solid var(--cyan);
+            outline-offset:2px;
+        }
+
+        @media (prefers-reduced-motion: reduce){
+            *{ animation:none !important; transition:none !important; }
+        }
+
+    </style>
+
+    <link href="../css/design-system.css" rel="stylesheet">
+</head>
+
+<body class="employee-theme">
+
+<div class="sidebar">
+
+    <div class="sidebar-logo">
+
+        <div class="logo-icon">
+            <i class="bi bi-headset"></i>
+        </div>
+
+        <div>
+            <h4>AI Help Desk</h4>
+            <small>Employee Portal</small>
+        </div>
+
+    </div>
+
+    <div class="menu-title">MAIN MENU</div>
+
+    <a href="dashboard.html" class="menu-link">
+        <i class="bi bi-grid-fill"></i>
+        <span>Dashboard</span>
+    </a>
+
+    <a href="create-ticket.html" class="menu-link active">
+        <i class="bi bi-plus-circle"></i>
+        <span>Create Ticket</span>
+    </a>
+
+    <a href="my-tickets.html" class="menu-link">
+        <i class="bi bi-ticket-perforated"></i>
+        <span>My Tickets</span>
+    </a>
+
+    <a href="profile.html" class="menu-link">
+        <i class="bi bi-person-circle"></i>
+        <span>Profile</span>
+    </a>
+
+    <a href="#" onclick="logout()" class="menu-link">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Logout</span>
+    </a>
+
+</div>
+
+<div class="topbar">
+    <button id="sidebarToggle" title="Toggle sidebar" aria-label="Toggle sidebar">
+        <i class="bi bi-list" style="font-size:19px;"></i>
+    </button>
+
+    <button class="icon-btn" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <i class="bi bi-moon-stars"></i>
+    </button>
+</div>
+
+<div class="main-wrap">
+
+<div class="container mt-4">
+
+    <!-- Header -->
+
+    <div class="page-header">
+
+        <h2>
+            <i class="bi bi-plus-circle"></i>
+            Create Support Ticket
+        </h2>
+
+        <p class="mb-0">
+
+            Submit a new issue and track its progress.
+
+        </p>
+
+    </div>
+
+    <!-- Form Card -->
+
+    <div class="card p-4">
+
+        <div class="section-title">
+
+            <i class="bi bi-ticket-detailed-fill"></i>
+
+            <span>
+
+                Ticket Information
+
+            </span>
+
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-6">
+
+                <label class="form-label">
+
+                    Ticket Title
+
+                </label>
+
+                <input
+                    type="text"
+                    id="title"
+                    class="form-control"
+                    placeholder="e.g. Laptop not starting">
+
+            </div>
+
+            <div class="col-md-6">
+
+                <label class="form-label">
+
+                    Category
+
+                </label>
+
+                <select
+                    id="category"
+                    class="form-select">
+
+                    <option>Hardware</option>
+                    <option>Software</option>
+                    <option>Network</option>
+                    <option>Access</option>
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Description
+            </label>
+
+            <textarea
+                id="description"
+                rows="7"
+                class="form-control"
+                placeholder="Describe the issue in detail"></textarea>
+
+        </div>
+        <div class="row g-4 mt-2">
+
+            <div class="col-md-6">
+
+                <label class="form-label">
+
+                    Priority
+
+                </label>
+
+                <select
+                    id="priority"
+                    class="form-select">
+
+                    <option>Low</option>
+
+                    <option selected>Medium</option>
+
+                    <option>High</option>
+
+                </select>
+
+            </div>
+
+    <div class="col-md-6">
+
+
+        <!-- Attachment -->
+
+        <div class="mb-4">
+
+            <label class="form-label">
+
+                Attachment
+
+            </label>
+
+            <div class="upload-box">
+
+                <i class="bi bi-cloud-arrow-up upload-icon"></i>
+
+                <h5 class="mt-3">
+
+                    Upload Attachment
+
+                </h5>
+
+                <p class="text-muted mb-3">
+
+                    PNG, JPG, JPEG or PDF (Optional)
+
+                </p>
+
+                <input
+                    type="file"
+                    id="attachment"
+                    class="form-control">
+
+                <small
+                    id="selectedFile"
+                    class="text-success mt-3 d-block">
+
+                    No file selected
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <!-- Buttons -->
+
+        <div class="d-flex justify-content-end gap-3 mt-4">
+
+            <a
+                href="dashboard.html"
+                class="btn btn-light btn-lg px-4 cancel-btn">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Cancel
+
+            </a>
+
+            <button
+                type="button"
+                id="createTicketBtn"
+                class="btn btn-primary btn-lg px-5 submit-btn"
+                onclick="validateAndCreateTicket()">
+                <i class="bi bi-send-fill"></i>
+
+                Create Ticket
+
+            </button>
+
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+    // ---- UI-only enhancements below. Nothing here touches form validation/logic. ----
+
+    document.getElementById('sidebarToggle').addEventListener('click', function () {
+        document.body.classList.toggle('collapsed');
+    });
+
+    const themeBtn = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('employee-theme');
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeBtn.innerHTML = '<i class="bi bi-sun"></i>';
+    }
+    themeBtn.addEventListener('click', function () {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('employee-theme', 'light');
+            themeBtn.innerHTML = '<i class="bi bi-moon-stars"></i>';
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('employee-theme', 'dark');
+            themeBtn.innerHTML = '<i class="bi bi-sun"></i>';
+        }
+    });
+</script>
+
+<script src="../js/toast.js"></script>
+<script src="../js/status-badges.js"></script>
+<script src="../js/employee.js"></script>
+
+</body>
+</html>
