@@ -78,6 +78,14 @@ public class AuthService : IAuthService
             };
         }
 
+        if (!user.IsActive)
+        {
+            return new AuthResponseDto
+            {
+                Message = "Your account has been disabled. Please contact the administrator."
+            };
+        }
+
         var token = _jwtService.GenerateToken(user);
 
         return new AuthResponseDto

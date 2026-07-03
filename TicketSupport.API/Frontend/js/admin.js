@@ -152,6 +152,54 @@ async function loadUsers() {
     }
 }
 
+async function toggleUserStatus(userId) {
+
+    const token =
+        localStorage.getItem("token");
+
+    try {
+
+        const response =
+            await fetch(
+                `http://localhost:5130/api/Users/${userId}/toggle-status`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
+                });
+
+        const result =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Failed to update user status.");
+        }
+
+        if (window.Toast) {
+            Toast.success(
+                result.Message || "Status updated",
+                result.Name || ""
+            );
+        }
+
+        // Refresh the table so the badge and button label update
+        loadUsers();
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        if (window.Toast) {
+            Toast.error("Update failed", "Unable to change user status. Please try again.");
+        }
+
+    }
+
+}
+
 async function viewUser(userId) {
 
     const token =

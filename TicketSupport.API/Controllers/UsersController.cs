@@ -40,4 +40,31 @@ public class UsersController : ControllerBase
             user.CreatedDate
         });
     }
+
+    [HttpPatch("{id}/toggle-status")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ToggleUserStatus(int id)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        user.IsActive = !user.IsActive;
+
+        await _userRepository.UpdateAsync(user);
+        await _userRepository.SaveChangesAsync();
+
+        return Ok(new
+        {
+            user.UserId,
+            user.Name,
+            user.IsActive,
+            Message = user.IsActive
+                ? "User has been enabled"
+                : "User has been disabled"
+        });
+    }
 }

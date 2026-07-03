@@ -1097,26 +1097,6 @@ chat.scrollTop = chat.scrollHeight;
 
                     ${result}
 
-                    <div class="chat-actions">
-
-                        <button
-                            class="btn btn-success btn-sm"
-                            onclick="issueSolved()">
-
-                            ✓ Solved
-
-                        </button>
-
-                        <button
-                            class="btn btn-outline-primary btn-sm"
-                            onclick="createTicketFromChat('${query}')">
-
-                            Create Ticket
-
-                        </button>
-
-                    </div>
-
                 </div>
 
             </div>
