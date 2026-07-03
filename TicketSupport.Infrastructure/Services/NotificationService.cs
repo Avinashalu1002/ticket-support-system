@@ -25,7 +25,7 @@ public class NotificationService : INotificationService
                 UserId = userId,
                 Message = message,
                 IsRead = false,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.UtcNow   // ✅ fixed
             };
 
         await _notificationRepository.AddAsync(
