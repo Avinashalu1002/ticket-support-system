@@ -11,6 +11,9 @@ using System.Text;
 using TicketSupport.Infrastructure.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.Configure<GroqSettings>(builder.Configuration.GetSection("GroqSettings"));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
